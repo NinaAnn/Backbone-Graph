@@ -10,12 +10,15 @@ def findMinTree(Data,mode='Inner'):
         mode:   'Inner': use minimum inner tree
                 'Global': use minimum global tree
     return:
+        G:  networkx.Graph()
         tree:   networkx.Graph()
+        globalTreePaths:    2-dimentional binary ndarray, record each edge's tree path.
+        edgeDict:   dictionary:{key=[source,target], value=int}, record the order of each edge in globalTreePaths
     '''
     G = readData(Data)
     tree = genMinInnerTree(G, mode)
-    globalTreePaths = optimizeTree(G, tree)
-    return G, tree, globalTreePaths
+    globalTreePaths, edgeDict = optimizeTree(G, tree)
+    return G, tree, globalTreePaths, edgeDict
 
 def readData(Data):
     '''
@@ -206,6 +209,7 @@ def optimizeTree(G, tree):
         G, tree
     return:
         globalTreePaths: 2-dimentional ndarray, containing all tree paths of all edges
+        edgeDict:   dictionary:{key=[source,target], value=int}, record the order of each edge in globalTreePaths
     '''
     globalEdges = G.edges(data=True)
     dicLen = len(list(G.edges))
@@ -240,7 +244,7 @@ def optimizeTree(G, tree):
             if reducedEdge != None:
                 globalTreePaths = updatePath(globalTreePaths, edgeDict, reEdgeDict, reducedEdge, edge, tree, d, dicLen)
     print('optimization ended')
-    return globalTreePaths
+    return globalTreePaths, edgeDict
 
 def updatePath(globalPaths, dic, redic, reducedEdge, addedEdge, tree, w, l):
     '''
