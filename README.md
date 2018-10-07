@@ -11,7 +11,7 @@ The usage of this function is:
   findMinTree(Data,mode='Inner')
 ```
 Input data type:
-  list [{'source': , 'target':}]
+> list [{'source': , 'target':}]
 
 Return:
 > G: networkx.Graph()
